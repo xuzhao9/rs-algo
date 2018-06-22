@@ -8,34 +8,46 @@ use std::collections::HashMap;
 // If no match, return none
 // Otherwise, return Some(index), where index is the first match
 pub fn boyer_moore(y: String, x: String) -> Option<Vec<usize>> {
-  let gs = bm_good_shift(&x);
-  let bs = bm_bad_shift(&x);
   let mut j: i32 = 0;
   let mut i: i32 = 0;
   if y.len() < x.len() {
     return None;
   }
-  let mut result: Vec<usize> = Vec::new();
-  while j <= (y.len() as i32 - x.len() as i32) {
-    for i in (0..x.len() as i32).rev() {
-      if x[i as usize] != y[(i + j) as usize] {
-        break;
-      }
-    }
-    if i < 0 {
-      result.push(j);
-      j += gs[0];
-    } else {
-      j += max(gs[i], bs[y[i+j]] - x.len() + 1 + i);
-    }
-  }
-  Some(result)
+  let gs = bm_good_shift(&x);
+  let bs = bm_bad_shift(&x);
+  println!("gs: {:?}", gs);
+  println!("bs: {:?}", bs);
+
+  Some(Vec::new())
+    
+  // let mut result: Vec<usize> = Vec::new();
+  // while j <= (y.len() as i32 - x.len() as i32) {
+  //   for i in (0..x.len() as i32).rev() {
+  //     if x[i as usize] != y[(i + j) as usize] {
+  //       break;
+  //     }
+  //   }
+  //   if i < 0 {
+  //     result.push(j);
+  //     j += gs[0];
+  //   } else {
+  //     j += max(gs[i], bs[y[i+j]] - x.len() + 1 + i);
+  //   }
+  // }
+  // Some(result)
 }
 
 fn bm_good_shift(x: &String) -> Vec<usize> {
   let mut out: Vec<usize> = Vec::with_capacity(x.len());
-  for idx in (0..x.len()-1).rev() {
+  for i in 0..x.len() {
+    out.push(0);
+  }
+  for idx in (0..(x.len()-1)).rev() {
     let seg = &x[idx+1..];
+    println!("idx = {} , seg = {}", idx, seg);
+    if idx < seg.len()+1 {
+      break;
+    }
     for seg_start in (1..(idx-seg.len())).rev() {
       let seg2 = &x[seg_start..seg.len()];
       if(seg == seg2) {
@@ -56,12 +68,13 @@ fn bm_good_shift(x: &String) -> Vec<usize> {
       out[idx] = x.len() - max_ol;
     } // no match
   } // no matching char
+  out
 }
 
 fn bm_bad_shift(x: &String) -> HashMap<&str, usize> {
   let mut out: HashMap<&str, usize> = HashMap::new();
   for idx in 0..x.len() {
-    out[x[idx]] = idx;
+    out.insert(&x[idx..idx+1], idx);
   }
   out
 }
