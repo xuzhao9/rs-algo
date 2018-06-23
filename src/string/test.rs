@@ -12,8 +12,8 @@ fn test_common_substring() {
 
 #[test]
 fn test_matching() {
-  let x = String::from("ABCDEFG");
+  let x = String::from("ABCDCCDEFGCDDCD");
   let y = String::from("CD");
   let v = boyer_moore(x, y);
-  assert_eq!(v, Some(vec![2]));
+  assert_eq!(v, Some(vec![2, 5, 10, 13]));
 }
