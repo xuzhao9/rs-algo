@@ -50,7 +50,7 @@ fn is_prime_rabin_miller_base(n: i64, base: i64) -> bool {
   if t == 1 || t == (n-1) {
     return true;
   }
-  for i in 1..r {
+  for _i in 1..r {
     let next_t = pow_mod(t, 2, n);
     if next_t == 1 || next_t == (n-1) {
       return true;
