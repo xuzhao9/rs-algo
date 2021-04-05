@@ -2,7 +2,7 @@
 // Algorithms implemented in Rust
 //
 
-mod string;
+mod number_theory;
 
 fn main() {
 }
