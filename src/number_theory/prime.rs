@@ -44,16 +44,28 @@ fn is_prime_rabin_miller_base(n: i64, base: i64) -> bool {
     d = d >> 1;
     r += 1;
   }
-  // To pass the test, either base ^ d = 1 (mod n),
-  // or base ^ (d * 2^i) = n-1 (mod n), where 0 <= i < r
+  // n-1 = d * (2 ^ r)
+  // n is a probable prime, either base ^ d = +1/-1 (mod n),
+  // or base ^ (d * 2^i) = -1 (mod n), where 0 < i < r-1
+  // or base ^ (d * 2^(r-1)) = +1/-1 (mod n)
+  // When 0 < i < r-1, if base ^ (d * 2 ^ i) = 1 (mod n), n must be composite
   let t = pow_mod(base, d, n);
   if t == 1 || t == (n-1) {
     return true;
   }
-  for _i in 1..r {
+  for i in 1..r {
     let next_t = pow_mod(t, 2, n);
-    if next_t == 1 || next_t == (n-1) {
-      return true;
+    if i == r - 1 {
+      if next_t == 1 || next_t == (n-1) {
+        return true;
+      }
+    } else {
+      if next_t == 1 {
+        return false;
+      }
+      if next_t == (n-1) {
+        return true;
+      }
     }
   }
   false 
