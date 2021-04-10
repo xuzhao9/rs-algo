@@ -4,10 +4,6 @@
 // Rabin-Miller primality test
 // When the input number is i64 (< 10^19),
 // base array: [2, 3, 7, 61, 24251]
-// Deterministic RM primality test (based on ERH):
-// The base a should satisfy the following:
-// 1 < a <= phi(n)/4, a is prime
-// phi(n): Euler totient function
 pub fn is_prime_rabin_miller(number: i64) -> bool {
   let base = [2, 3, 7, 61, 24251];
   if number <= 1 {
